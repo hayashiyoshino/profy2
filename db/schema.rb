@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180615092343) do
+ActiveRecord::Schema.define(version: 20180615120742) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "key",        limit: 255
@@ -38,6 +38,10 @@ ActiveRecord::Schema.define(version: 20180615092343) do
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
     t.integer  "group_id",               limit: 4
+    t.string   "family_name",            limit: 255
+    t.string   "first_name",             limit: 255
+    t.string   "family_name_kana",       limit: 255
+    t.string   "first_name_kana",        limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
