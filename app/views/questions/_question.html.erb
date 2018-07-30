@@ -1,0 +1,24 @@
+<div class="question_content top_content">
+  <header class="question_header">
+    <div class="question_image icon_image" style="background-image: url(<%= question.user.avatar.url(:medium) %>);"></div>
+    <div class="question_user_info user_info">
+      <span><%= link_to question.user.name, user_path(question.user) %></span>
+      <time><%= time_ago_in_words question.created_at %></time>
+      <%#time_ago_in_wordsは投稿時間を〜時間前のようにしたい場合に利用するビューヘルパーメソッド。特にgemなど入れす利用できる。デフォルトだと英語なのでrailsの環境設定を日本語で表示したい場合はconfig/application.rbの言語設定を日本語(config.i18n.default_local=:ja)にしておく必要がある。また、日本語の文言表示のためにconfig/locales以下にja.ymlを配置しておく%>
+    </div>
+  </header>
+  <div class="question_body">
+    <div class="question_box">
+      <span class="q">Q</span>
+      <span class="question_text"><%= question.text %></span>
+    </div>
+    <div class="questioned">
+      <span>回答<%= question.answers.count %>件</span>
+    </div>
+    <%= form_tag(new_answer_path, method: :get, class: "question_submit") do %>
+      <%= hidden_field_tag(:question_id, question.id) %>
+      <%#hidden_field_tagはユーザーが入力する必要のない自明のデータをパラメーターとして送信したい時利用する。上記では:question_idというキーに対して個別のquestionのidを値として設定している。これによってパラメーターが送られた先では、params[:question_id]とするだけで簡単に対応する質問のidが取得できる%>
+      <%= submit_tag("回答する") %>
+      <% end %>
+  </div>
+</div>

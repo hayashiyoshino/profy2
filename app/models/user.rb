@@ -9,15 +9,19 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable,
          :validatable, :confirmable,
          authentication_keys: [:email, :group_key]
+         #承認を行いたいキーを変更する場合は、:authentication_keysに指定するキーを変更する。今回の場合は:emailに加えて:group_keyを追加している。これにより認証に:group_keyが使われるようになる。
 
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>"}
   validates_attachment_content_type :avatar, content_type: ["image/jpg","image/jpeg","image/png"]
 
   #association
   belongs_to :group
+  has_many :questions, ->{ order("created_at DESC") }
+  has_many :answers, ->{ order("updated_at DESC") }
 
   #validation
   before_validation :group_key_to_id, if: :has_group_key?
+  #before_validationメソッドはバリデーションを行う前に実行したい処理を書くときに使う。group_key_to_idメソッドはhas_group_key?によりインスタンスがある時のみ発動する。
 
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
@@ -35,6 +39,7 @@ class User < ActiveRecord::Base
       false
     end
   end
+  #self.find_first_by_auth_conditionsメソッドはdeviseに定義されているメソッド。このメソッドはログインやアクセス時のユーザー認証時にユーザーのインスタンスを取得する役割を果たしている。今回のようにカスタマイズでもしない限り見ることはないが、８行目でモジュールを読み込んだことで自動的に読み込まれている。カスタマイズのためにはオーバーライド(再定義による上書き)をして使う。デフォルトではemailとパスワードでテーブルから検索するようになっているため、新たにgroup_idを検索条件に追加している。
 
   def name
     "#{family_name} #{first_name}"
@@ -47,6 +52,8 @@ class User < ActiveRecord::Base
   def full_profile?
     avatar? && family_name? && first_name? && family_name_kana? && first_name_kana?
   end
+  #ユーザー画像、姓名、姓名カナ、全てが登録されていないとfalseを返すメソッドになっている。
+  #カラム名＋？とかくと、指定したカラムに値が存在しないとfalseを返すというActiveRecordの機能を利用した。
 
   private
   def has_group_key?
@@ -57,4 +64,5 @@ class User < ActiveRecord::Base
     group = Group.where(key: group_key).first_or_create
     self.group_id = group.id
   end
+  #groupテーブルのkeyカラムからgroup_keyと一致するインスタンスを取り出し(なければインスタンスを生成し)、自身nのgroup_idプロパティにそのidをセットしている。
 end

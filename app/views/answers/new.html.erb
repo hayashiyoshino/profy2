@@ -1,0 +1,13 @@
+<div class="row form">
+  <div class="col-lg-12">
+    <%= form_for(@answer) do |f| %>
+    <h3><span>Q</span><%= @question.text %></h3>
+    <div class="form-group">
+      <%= f.text_area :text, placeholder: "回答を入力してください", cols:"30", rows:"10", autofocus:"true", class:"form-control" %>
+    </div>
+    <%= f.hidden_field :question_id %>
+    <%#ここでもhidden_fieldを用いてユーザーが入力する必要のない自明の値がパラメーターとして設定されている。hidden_fieldをform_forメソッド内で使用する際はf.hidden_field :カラム名、の形で指定する。<input type="hidden" value="2" name="answer[question_id]" id="answer_question_id">のようなhtmlに変換される%>
+    <%= f.submit "回答する", class:"btn btn-primary withripple"%>
+    <% end %>
+  </div>
+</div>
