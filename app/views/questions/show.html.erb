@@ -1,0 +1,20 @@
+<div class="row form">
+  <div class="col-lg-12">
+    <h3><span>Q</span><%= @question.text %></h3>
+    <div class="group_action panel-default">
+      <div class="panel-body">
+        <% unless @question.answers.exists?(user_id: current_user.id) %>
+        <%= link_to '質問に回答する', new_answer_path(question_id: @question.id) %>
+        <% else %>
+        <h4>＊回答済み＊</h4>
+        <% end %>
+      </div>
+    </div>
+    <% if @question.answers.present? %>
+    <h3><span>A</span>この質問への回答</h3>
+    <%= render partial: "questions/answer", collection: @answers %>
+    <% end %>
+  </div>
+</div>
+<%#「回答する」ボタンの表示に対して条件分岐を設定している。すでにユーザーがその質問に回答していた場合は回答ボタンが表示されず、代わりに「＊回答済み＊」と表示される。
+質問個別ページでは、その質問に関係する回答全てを表示する。繰り返し同じ型に当てはめて回答を表示したいため、部分テンプレートを用意する。%>

@@ -8,5 +8,11 @@
       </div>
       <% end %>
       <%#現在ログインしているユーザーとユーザーページのユーザーが一致する場合にプロフィール編集へのリンクが出るようにしている%>
+      <% if @questions.present? %>
+      <h3>このユーザーの回答した質問</h3>
+      <div class="clearfix">
+        <%= render partial: 'users/question', collection: @questions %>
+      </div>
+      <% end %>
   </div>
 </div>

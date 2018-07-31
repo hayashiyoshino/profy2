@@ -1,7 +1,10 @@
 class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
+    @questions = @user.answerd_questions.uniq
   end
+  #ユーザーページでユーザーの答えた質問を表示するために、@user.answerd_questionsでhas_many throughオプションを利用しQuestionクラスのインスタンス配列を取得している。answerd_questionメソッドはuserモデルで定義。
+  #uniqメソッドは配列の中の重複する要素を取り除いた値を返してくれるメソッド。
 
   def edit
   end

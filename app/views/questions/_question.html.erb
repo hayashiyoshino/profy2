@@ -13,12 +13,19 @@
       <span class="question_text"><%= question.text %></span>
     </div>
     <div class="questioned">
-      <span>回答<%= question.answers.count %>件</span>
+      <%= link_to "回答#{question.answers.count}件", question_path(question) %>
     </div>
+    <% unless question.answers.exists?(user_id: current_user.id) %>
+    <%#(question.answers)でアソシエーションを活用し、一つの質問に対して寄せられた回答を全て取得している。さらにその回答中から(.exists?(user_id: current_user.id))で現在ログインしているユーザーが回答したものを探し、存在が確認できなければfalseを返し、回答ボタンを表示する%>
     <%= form_tag(new_answer_path, method: :get, class: "question_submit") do %>
       <%= hidden_field_tag(:question_id, question.id) %>
       <%#hidden_field_tagはユーザーが入力する必要のない自明のデータをパラメーターとして送信したい時利用する。上記では:question_idというキーに対して個別のquestionのidを値として設定している。これによってパラメーターが送られた先では、params[:question_id]とするだけで簡単に対応する質問のidが取得できる%>
       <%= submit_tag("回答する") %>
+      <% end %>
+      <% else %>
+        <div class="answer_other">
+          <h4>＊回答済み＊</h4>
+        </div>
       <% end %>
   </div>
 </div>
