@@ -18,6 +18,8 @@
     <% end %>
   </div>
 
-  <%= render partial: "questions/question", collection: @questions %>
-  <%#部分テンプレートを使用している%>
+  <%= render @feed_contents_resource %>
+  <%#部分テンプレートを使用している。renderメソッドにインスタンス配列を渡した時は、インスタンスに応じて部分テンプレートを自動で呼び出し分けてくれる。つまりAnserのインスタンスだった場合はapp/views/answers/_answer.html.erbを呼び、Questionのインスタンスだった場合はapp//views/questions/_question.html.erbを呼び出してくれる。%>
+  <%= paginate(@feed_contents) %>
+  <%#pagenateメソッドにはコントローラーでpageメソッドを適用した変数を渡す。%>
 <% end %>
