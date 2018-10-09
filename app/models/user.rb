@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   has_many :answers, ->{ order("updated_at DESC") }
   has_many :answerd_questions, through: :answers, source: :question
   #has_many :answerd_questions, through: :answers, source: :questionのアソシエーション定義では「自分の回答した質問」を取得している。
-  #sourceオプションはい関連テーブル(answers)から先のモデルにアクセスするための関連名を指定している。今回はanswersテーブルを通し、questionsテーブルの情報を取得しているので:questionを指定している。アソシエーションの「名前と関連先テーブルが同じ名前の場合省略することもできる。
+  #sourceオプションは関連テーブル(answers)から先のモデルにアクセスするための関連名を指定している。今回はanswersテーブルを通し、questionsテーブルの情報を取得しているので:questionを指定している。アソシエーションの「名前と関連先テーブルが同じ名前の場合省略することもできる。今回の場合、has_many :questions というアソシエーション名にしてしまえばsourceオプションをかく必要はない。しかし、それだとUserとQuestionを紐付ける通常の１対多のアソシエーション定義と被ってしまうのでanswerd_questionという違う名前にしている。
 
   #validation
   before_validation :group_key_to_id, if: :has_group_key?

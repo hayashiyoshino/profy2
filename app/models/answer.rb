@@ -2,12 +2,17 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :user
   has_one :feed_content, as: :content, dependent: :destroy
+  # ポリモーフィックのアソシエーション。クラス名はfeed_content、ポリモーフィック関連名はcontent。feed_contentのcontent_id、content_typeカラムにanswerのid、answerのタイプ保存されるようにしている。
+
 
   validates_presence_of :user_id, :text
+  # 値が空でないかのバリデーション
+
 
   after_create :create_feed_content
+  # 回答がcreateされた後にfeed_contentもcreateされるようコールバックを設定している。
   after_update :update_feed_content
-  #チムラインを作成した際に設定したのと同様にafter_updateと回答に変更が加えられたタイミングでもコールバックを設定している。
+  #回答に変更が加えられたタイミングでもコールバックを設定している。こうすることで編集された投稿がタイムラインの一番上にくるようになる。
 
   private
   def create_feed_content
